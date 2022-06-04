@@ -3,8 +3,6 @@
 #include <map>
 #include <list>
 #include <fstream>
-
-
 using namespace std;
 
 class Node
@@ -22,7 +20,6 @@ public:
 		right = R;
 		a = L->a + R->a;
 	}
-
 };
 
 
@@ -31,6 +28,9 @@ struct MyCompare
 	bool operator()(const Node* l, const Node* r) const { return l->a < r->a; }
 };
 
+
+vector<bool> code;
+map<char, vector<bool> > table;
 
 void BuildTable(Node* root)
 {
@@ -52,15 +52,9 @@ void BuildTable(Node* root)
 }
 
 
-
-vector<bool> code;
-map<char, vector<bool> > table;
-
-
-
 int main(int argc, char* argv[])
 {
-
+	
 	ifstream f("input.txt", ios::out | ios::binary);
 
 	map<char, int> m;
@@ -72,6 +66,7 @@ int main(int argc, char* argv[])
 	}
 
 
+	
 
 	list<Node*> t;
 	for (map<char, int>::iterator itr = m.begin(); itr != m.end(); ++itr)
@@ -83,7 +78,7 @@ int main(int argc, char* argv[])
 	}
 
 
-
+	
 
 	while (t.size() != 1)
 	{
@@ -99,16 +94,17 @@ int main(int argc, char* argv[])
 
 	}
 
-	Node* root = t.front();
+	Node* root = t.front();   
+
+		
 
 	BuildTable(root);
 
+	
 
-	f.clear(); f.seekg(0); // перемещаем указатель снова в начало файла
+	f.clear(); f.seekg(0); // РїРµСЂРµРјРµС‰Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ СЃРЅРѕРІР° РІ РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 
-	ofstream g("output.txt", ios::out | ios::binary);
-
-
+	ofstream g("encode.txt", ios::out | ios::binary);
 
 	int count = 0; char buf = 0;
 	while (!f.eof())
@@ -125,7 +121,28 @@ int main(int argc, char* argv[])
 
 	f.close();
 	g.close();
+
 	
+
+	ifstream F("encode.txt", ios::in | ios::binary);
+	ofstream G("decode.txt", ios::out | ios::binary);
+
+	setlocale(LC_ALL, "Russian"); 
+
+	Node * p = root;
+	count = 0; char byte;
+	byte = F.get();
+	while (!F.eof())
+	{
+		bool b = byte & (1 << (7 - count));
+		if (b) p = p->right; else p = p->left;
+		if (p->left == NULL && p->right == NULL) { G << p->c; p = root; }
+		count++;
+		if (count == 8) { count = 0; byte = F.get(); }
+	}
+
+	F.close();
+	G.close();
 
 	return 0;
 }
