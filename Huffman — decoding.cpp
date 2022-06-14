@@ -82,8 +82,49 @@ v.clear();
 	byte = F.get();
 	while (!F.eof())
 	{
-		bool b = byte & (1 << (7 - count));
 		
+		
+		if(byte=='|')		{  //остался хвост
+			
+			
+			
+			int k;
+			k = F.get()-48;
+			byte = F.get();
+		
+		
+			while(count != k){
+			
+			
+			bool b = byte & (1 << (7 - count));
+			cout<<b;
+		
+		
+		v.push_back(b);
+		
+			for (map<char, vector<bool> >::iterator itr = table.begin(); itr != table.end(); ++itr)
+	{
+		
+		if(itr->second == v) {
+		G<<itr->first; v.clear();
+	}
+	
+	}
+		
+			count++;
+		
+			
+			
+			}
+		
+		break;
+		}
+		
+		
+		
+		
+		bool b = byte & (1 << (7 - count));
+		cout<<b;
 		v.push_back(b);
 		
 			for (map<char, vector<bool> >::iterator itr = table.begin(); itr != table.end(); ++itr)
@@ -97,7 +138,7 @@ v.clear();
 		
 		
 			count++;
-			if (count == 8) { count = 0; byte = F.get(); }
+			if (count == 8) { count = 0; byte = F.get();  }
 	
 	}
 

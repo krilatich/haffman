@@ -130,11 +130,18 @@ int main(int argc, char* argv[])
 		for (int n = 0; n < x.size(); n++)
 		{
 			buf = buf | x[n] << (7 - count);
+			cout<<x[n];
 			count++;
 			if (count == 8) { count = 0;   g << buf; buf = 0; }
 		}
+	
 	}
+	
 
+	if(buf)g<<"|"<<count<<buf;
+	
+	
+	
 	f.close();
 	g.close();
 
